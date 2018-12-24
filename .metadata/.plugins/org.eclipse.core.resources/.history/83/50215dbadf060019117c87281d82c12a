@@ -1,0 +1,62 @@
+package client;
+
+import java.io.StringReader;
+import java.net.URI;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+
+import model.Currency;
+
+public class CurrencyClient {
+
+	private WebTarget webTarget;
+
+	public CurrencyClient(String format, String currencyCode) {
+		// utworzenie obiektu klasy Client
+		Client client = ClientBuilder.newClient();
+		// konstruowanie adresu URI
+		URI uri = UriBuilder.fromUri("http://api.nbp.pl/api/exchangerates/rates/c/").queryParam("format", format)
+				.build();
+		// reprezentacja zasobu
+		webTarget = client.target(uri);
+		webTarget = webTarget.path(currencyCode).path("last").path("3");
+	}
+
+	public String getCurrencyXML() {
+		String answer = webTarget.request().accept(MediaType.APPLICATION_XML).get(String.class);
+		System.out.println(answer);
+		return answer;
+	}
+
+	public String getCurrencyJSON() {
+		String answer = webTarget.request().accept(MediaType.APPLICATION_JSON).get(String.class);
+		System.out.println(answer);
+		return answer;
+	}
+
+	public Currency getCurrencyInstance() {
+		try {
+			JAXBContext jc = JAXBContext.newInstance(model.Currency.class, model.Rate.class);
+			Unmarshaller unmarshaller = jc.createUnmarshaller();
+
+			String currencyXML = this.getCurrencyXML();
+			StringReader reader = new StringReader(currencyXML);
+			Currency currencyInstance = (Currency) unmarshaller.unmarshal(reader);
+			System.out.println(currencyInstance.getName());
+			return currencyInstance;
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+}

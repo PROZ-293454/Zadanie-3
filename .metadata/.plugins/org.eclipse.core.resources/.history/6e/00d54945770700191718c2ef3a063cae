@@ -1,0 +1,77 @@
+package internet;
+
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBException;
+
+import my.model.Currency;
+import nbp.client.NBPClient;
+import nbp.model.CurrencyRates;
+
+@Path("{table}/{code}/{topCount}")
+public class CurrencyResource {
+
+	@GET
+	// @Produces()
+	public String get(@DefaultValue("html") @QueryParam("type") String type, @PathParam("table") String table,
+			@PathParam("code") String code, @PathParam("topCount") String topCount) {
+		return getResult(table, code, topCount, getMediaType(type));
+
+	}
+
+	/*
+	 * @GET
+	 * 
+	 * @Path("xml")
+	 * 
+	 * @Produces({ MediaType.APPLICATION_XML }) public String
+	 * getXML(@PathParam("table") String table, @PathParam("code") String
+	 * code, @PathParam("topCount") String topCount) { return getResult(table, code,
+	 * topCount, MediaType.APPLICATION_XML);
+	 * 
+	 * }
+	 * 
+	 * @GET
+	 * 
+	 * @Path("json")
+	 * 
+	 * @Produces({ MediaType.APPLICATION_JSON }) public String
+	 * getJSON(@PathParam("table") String table, @PathParam("code") String
+	 * code, @PathParam("topCount") String topCount) { return getResult(table, code,
+	 * topCount, MediaType.APPLICATION_JSON); }
+	 * 
+	 * @GET
+	 * 
+	 * @Path("html")
+	 * 
+	 * @Produces({ MediaType.TEXT_HTML }) public String getHTML(@PathParam("table")
+	 * String table, @PathParam("code") String code, @PathParam("topCount") String
+	 * topCount) { return getResult(table, code, topCount, MediaType.TEXT_HTML); }
+	 */
+
+	private String getMediaType(String type) {
+		if (type.equals("xml"))
+			return MediaType.APPLICATION_XML;
+		else if (type.equals("json"))
+			return MediaType.APPLICATION_JSON;
+		else
+			return MediaType.TEXT_HTML;
+	}
+
+	private String getResult(String table, String code, String topCount, String mediaType) {
+		NBPClient client = new NBPClient();
+		try {
+			CurrencyRates jpyNBP = client.getCurrencyInstance(table, code, topCount);
+			Currency jpy = new Currency(jpyNBP.getName(), jpyNBP.getCode(), jpyNBP.getBidMean(), jpyNBP.getAskMean(), jpyNBP.getMidMean());
+			return jpy.toChosenFormat(mediaType);
+		} catch (Exception e) {
+			return e.toString();
+		}
+	}
+
+}

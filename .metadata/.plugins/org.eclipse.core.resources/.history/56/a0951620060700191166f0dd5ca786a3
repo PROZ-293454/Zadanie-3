@@ -1,0 +1,33 @@
+package proz.ws;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+@Path("/student")
+public class StudentResource {
+	@GET
+	@Produces({ MediaType.APPLICATION_XML })
+	public Student getXML() {
+		Student student = instanteStudent();
+		student.setMime(MediaType.APPLICATION_XML.toString());
+		return student;
+	}
+
+	@GET
+	@Produces({ MediaType.TEXT_HTML })
+	public Student getHTML() {
+		Student student = instanteStudent();
+		student.setMime(MediaType.TEXT_HTML.toString());
+		return student;
+	}
+
+	private Student instanteStudent() {
+		Student student = new Student();
+		student.setFirstName("Jan");
+		student.setLastName("Hanas");
+		student.setIndexNo(0);
+		return student;
+	}
+}

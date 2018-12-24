@@ -1,0 +1,7 @@
+INDEX VERSION 1.4+C:\Users\asus\Documents\eclipse-workspace\ostatnie_cwiczenie\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
+185593932.index
+3151747347.index
+2723106551.index
+3739421932.index
+3727156257.index
+4055324553.index

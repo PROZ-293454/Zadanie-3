@@ -1,0 +1,35 @@
+package main;
+
+import javax.xml.bind.JAXBException;
+
+import my.model.Currency;
+import nbp.client.NBPClient;
+import nbp.model.CurrencyRates;
+import nbp.model.Rate;
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		NBPClient client = new NBPClient();
+		// System.out.println(client.getXML("C", "jpy", 3));
+		/*
+		 * CurrencyRates jpy = new CurrencyRates("Yen", "jpy", "C");
+		 * jpy.getRates().add(new Rate("0a", "01.01.2001", 10, 20));
+		 * jpy.getRates().add(new Rate("1b", "02.01.2001", 11, 21));
+		 * jpy.getRates().add(new Rate("2c", "03.01.2001", 12, 22));
+		 */
+		try {
+			// System.out.println(jpy.toXML());
+			CurrencyRates jpyNBP = client.getCurrencyInstance("C", "jpy", 3);
+			Currency jpy = new Currency(jpyNBP.getName(), jpyNBP.getCode(), jpyNBP.getBidMean(), jpyNBP.getAskMean());
+			System.out.println(jpy.toXML());
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}

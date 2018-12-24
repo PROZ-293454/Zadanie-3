@@ -1,0 +1,41 @@
+package client;
+
+import java.net.URI;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+
+public class CurrencyClient {
+
+	public static void main(String[] args) {
+		//utworzenie obiektu klasy Client
+		Client client = ClientBuilder.newClient();
+		// konstruowanie adresu URI
+		URI uri = UriBuilder.fromUri("http://api.nbp.pl/api/exchangerates/rates/c/")
+		.build();
+		//albo URI uri = URI.create(http://localhost:8080/atj);
+		//reprezentacja zasobu
+		WebTarget webTarget = client.target(uri);
+		webTarget = webTarget.path("jpy").path("last").path("3");
+		//wywo³anie ¿¹dania i odebranie odpowiedzi
+		String response = webTarget.request()
+		.accept(MediaType.TEXT_PLAIN)
+		.get(Response.class).toString();
+		String plainAnswer = webTarget.request()
+		.accept(MediaType.TEXT_PLAIN).get(String.class);
+		String xmlAnswer = webTarget.request()
+		.accept(MediaType.TEXT_XML).get(String.class);
+		String htmlAnswer = webTarget.request()
+		.accept(MediaType.TEXT_HTML).get(String.class);
+		System.out.println("response: "+response);
+		System.out.println("plain: "+plainAnswer);
+		System.out.println("xml: "+xmlAnswer);
+		System.out.println("html: "+htmlAnswer);
+
+	}
+
+}

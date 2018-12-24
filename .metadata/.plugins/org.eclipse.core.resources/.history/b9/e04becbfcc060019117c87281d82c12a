@@ -1,0 +1,46 @@
+package proz;
+
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+// klasa g³ówna implementuj¹ca polecenia HTTP
+// jest adnotowana @Path
+// jest publiczna
+// ma domyœlny i publiczny konstruktor
+@Path("hello")
+public class Hello {
+
+	/*
+	 * @GET
+	 * 
+	 * @Path("{user}") public String sayHello(@PathParam("user") String name) {
+	 * return "Hello " + name; }
+	 */
+
+	/*
+	 * @GET public String
+	 * sayHelloToQueryUser(@DefaultValue("Mieszek") @QueryParam("user") String name)
+	 * { return "Hello " + name; }
+	 */
+	
+	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	public String sayHello() {
+	return "Hello";
+	}
+	@GET
+	@Produces(MediaType.TEXT_HTML)
+	public String sayHelloHTML() {
+	return "<html><body><h1>Hello</h1></body></html>";
+	}
+	@GET
+	@Produces(MediaType.TEXT_XML)
+	public String sayHelloXML() {
+	return "<?xml version=\"1.0\"?>" + "<hello>Hello</hello>";
+	}
+}

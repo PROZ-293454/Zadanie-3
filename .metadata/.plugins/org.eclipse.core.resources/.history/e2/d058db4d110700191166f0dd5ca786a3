@@ -1,0 +1,50 @@
+package internet;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBException;
+
+import my.model.Currency;
+import nbp.client.NBPClient;
+import nbp.model.CurrencyRates;
+
+@Path("{currencyCode}")
+public class CurrencyResource {
+
+	@GET
+	@Path("xml")
+	@Produces({ MediaType.APPLICATION_XML })
+	public String getXML(@PathParam("currencyCode") String code) {
+		return getResult(code, MediaType.APPLICATION_XML);
+		
+	}
+
+	@GET
+	@Path("json")
+	@Produces({ MediaType.APPLICATION_JSON })
+	public String getJSON(@PathParam("currencyCode") String code) {
+		return getResult(code, MediaType.APPLICATION_JSON);
+	}
+	
+	@GET
+	@Path("html")
+	@Produces({ MediaType.APPLICATION_FORM_URLENCODED })
+	public String getHTML(@PathParam("currencyCode") String code) {
+		return getResult(code, MediaType.APPLICATION_FORM_URLENCODED);
+	}
+
+	private String getResult(String code, String mediaType) {
+		NBPClient client = new NBPClient();
+		try {
+			CurrencyRates jpyNBP = client.getCurrencyInstance("C", code, 3);
+			Currency jpy = new Currency(jpyNBP.getName(), jpyNBP.getCode(), jpyNBP.getBidMean(), jpyNBP.getAskMean());
+			return jpy.toChosenFormat(mediaType);
+		} catch (JAXBException e) {
+			return e.toString();
+		}
+	}
+
+}

@@ -1,0 +1,111 @@
+package nbp.model;
+
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "ExchangeRatesSeries")
+public class CurrencyRates {
+
+	private String name;
+	private String code;
+	private String table;
+	private List<Rate> rates = new ArrayList<>();
+
+	public CurrencyRates() {
+		this.name = "";
+		this.code = "";
+		this.table = "A";
+	}
+
+	public CurrencyRates(String name, String code, String table) {
+		this.name = name;
+		this.code = code;
+		this.table = table;
+	}
+
+	@XmlElement(name = "Table")
+	public String getTable() {
+		return table;
+	}
+
+	@XmlElement(name = "Currency")
+	public String getName() {
+		return name;
+	}
+
+	@XmlElement(name = "Code")
+	public String getCode() {
+		return code;
+	}
+
+	@XmlElementWrapper(name = "Rates")
+	@XmlElement(name = "Rate")
+	public List<Rate> getRates() {
+		return rates;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public void setRates(List<Rate> rates) {
+		this.rates = rates;
+	}
+
+	public void setTable(String table) {
+		this.table = table;
+	}
+
+	public String toXML() throws JAXBException {
+		JAXBContext jc = JAXBContext.newInstance(nbp.model.CurrencyRates.class, nbp.model.Rate.class);
+		Marshaller marsh = jc.createMarshaller();
+
+		StringWriter writer = new StringWriter();
+		marsh.marshal(this, writer);
+		return writer.toString();
+	}
+
+	public double getBidMean() {
+		double bidMean = 0;
+		for (Rate rate : rates) {
+			bidMean += rate.getBid();
+		}
+
+		bidMean /= rates.size();
+		return bidMean;
+	}
+
+	public double getAskMean() {
+		double askMean = 0;
+		for (Rate rate : rates) {
+			askMean += rate.getAsk();
+		}
+
+		askMean /= rates.size();
+		return askMean;
+	}
+	
+	public double getMidMean() {
+		double midMean = 0;
+		for (Rate rate : rates) {
+			midMean += rate.getMid();
+		}
+
+		midMean /= rates.size();
+		return midMean;
+	}
+}

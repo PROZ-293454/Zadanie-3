@@ -1,0 +1,20 @@
+package nbp;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import client.CurrencyClient;
+
+@Path("{currencyCode}")
+public class CurrencyResource {
+		@GET
+		@Path("xml")
+		@Produces({ MediaType.APPLICATION_XML })
+		public String getXML(@PathParam("currencyCode") String code) {
+			CurrencyClient client = new CurrencyClient("xml", code);
+			return client.getCurrencyXML();
+		}
+}

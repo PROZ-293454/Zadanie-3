@@ -1,0 +1,60 @@
+package model;
+
+import java.util.Date;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "Rate")
+public class Rate {
+
+	private String number;
+	private Date effectiveDate;
+	private double bid;
+	private double ask;
+
+	public Rate(String number, Date effectiveDate, double bid, double ask) {
+		super();
+		this.number = number;
+		this.effectiveDate = effectiveDate;
+		this.bid = bid;
+		this.ask = ask;
+	}
+
+	@XmlElement(name = "No")
+	public String getNumber() {
+		return number;
+	}
+
+	@XmlElement(name = "EffectiveDate")
+	public Date getEffectiveDate() {
+		return effectiveDate;
+	}
+
+	@XmlElement(name = "Bid")
+	public double getBid() {
+		return bid;
+	}
+
+	@XmlElement(name = "Ask")
+	public double getAsk() {
+		return ask;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	public void setEffectiveDate(Date effectiveDate) {
+		this.effectiveDate = effectiveDate;
+	}
+
+	public void setBid(double bid) {
+		this.bid = bid;
+	}
+
+	public void setAsk(double ask) {
+		this.ask = ask;
+	}
+
+}

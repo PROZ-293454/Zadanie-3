@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO 8859"?>
+<xsl:stylesheet version="1.0"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+	<xsl:template match="/">
+		<html>
+			<body>
+				<h2>Informacja o œrednim kursie waluty</h2>
+				<p>
+					<b>Nazwa: </b>
+					<xsl:value-of select="Waluta/Nazwa_waluty" />
+				</p>
+				<p>
+					<b>Kod: </b>
+					<xsl:value-of select="Waluta/Kod_waluty" />
+				</p>
+				<p>
+					<b>Œredni kurs ceny kupna: </b>
+					<xsl:value-of select="Waluta/Œredni_kurs_ceny_kupna" />
+				</p>
+				<p>
+					<b>Œredni kurs ceny sprzeda¿y: </b>
+					<xsl:value-of select="Waluta/Œredni_kurs_ceny_sprzeda¿y" />
+				</p>
+			</body>
+		</html>
+	</xsl:template>
+</xsl:stylesheet>

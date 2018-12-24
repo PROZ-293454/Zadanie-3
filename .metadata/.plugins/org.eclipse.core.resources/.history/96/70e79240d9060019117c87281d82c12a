@@ -1,0 +1,22 @@
+package nbp;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Currency {
+	private String currency;
+	public String getNamey() {
+		return currency;
+	}
+	public void setName(String name) {
+		this.currency = name;
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	private String code;
+	private List<Rate> rates = new ArrayList<>();
+}

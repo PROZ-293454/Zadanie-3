@@ -1,0 +1,125 @@
+package my.model;
+
+import java.io.StringWriter;
+
+import org.eclipse.persistence.jaxb.JAXBContextFactory;
+import org.eclipse.persistence.jaxb.JAXBContextProperties;
+import org.eclipse.persistence.jaxb.MarshallerProperties;
+import java.net.URI;
+import java.util.Currency;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "Waluta")
+public class Currency {
+	private String name;
+	private String code;
+	private double bidMean;
+	private double askMean;
+
+	public Currency(String name, String code, double bidMean, double askMean) {
+		this.name = name;
+		this.code = code;
+		this.bidMean = bidMean;
+		this.askMean = askMean;
+	}
+
+	public Currency() {
+		this.name = "";
+		this.code = "";
+		this.bidMean = 0;
+		this.askMean = 0;
+	}
+
+	@XmlElement(name = "Nazwa_waluty")
+	public String getName() {
+		return name;
+	}
+
+	@XmlElement(name = "Kod_waluty")
+	public String getCode() {
+		return code;
+	}
+
+	@XmlElement(name = "Œredni_kurs_ceny_kupna")
+	public double getBidMean() {
+		return bidMean;
+	}
+
+	@XmlElement(name = "Œredni_kurs_ceny_sprzeda¿y")
+	public double getAskMean() {
+		return askMean;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public void setBidMean(double bidMean) {
+		this.bidMean = bidMean;
+	}
+
+	public void setaskMean(double askMean) {
+		this.askMean = askMean;
+	}
+
+	public String toXML() throws JAXBException {
+		//JAXBContext jc = JAXBContext.newInstance(Currency.class);
+		Map<String, Object> properties = new HashMap<>();
+		properties.put(JAXBContextProperties.MEDIA_TYPE, "application/xml");
+		properties.put(JAXBContextProperties.JSON_INCLUDE_ROOT, false);
+
+		JAXBContext jc = JAXBContextFactory.createContext(new Class[] { Currency.class }, properties);
+
+		Marshaller marsh = jc.createMarshaller();
+		marsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+		StringWriter writer = new StringWriter();
+		marsh.marshal(this, writer);
+		return writer.toString();
+	}
+	
+	public String toChosenFormat(String mediaType) throws JAXBException {
+		//JAXBContext jc = JAXBContext.newInstance(Currency.class);
+		Map<String, Object> properties = new HashMap<>();
+		properties.put(JAXBContextProperties.MEDIA_TYPE, mediaType);
+		properties.put(JAXBContextProperties.JSON_INCLUDE_ROOT, false);
+
+		JAXBContext jc = JAXBContextFactory.createContext(new Class[] { Currency.class }, properties);
+
+		Marshaller marsh = jc.createMarshaller();
+		marsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+		StringWriter writer = new StringWriter();
+		marsh.marshal(this, writer);
+		return writer.toString();
+	}
+
+	public String toJSON() throws JAXBException {
+		Map<String, Object> properties = new HashMap<>();
+		properties.put(JAXBContextProperties.MEDIA_TYPE, "application/json");
+		properties.put(JAXBContextProperties.JSON_INCLUDE_ROOT, false);
+
+		JAXBContext jc = JAXBContextFactory.createContext(new Class[] { Currency.class }, properties);
+		// JAXBContext.newInstance(Currency.class);
+		Marshaller marsh = jc.createMarshaller();
+		marsh.setProperty(MarshallerProperties.MEDIA_TYPE, MediaType.APPLICATION_JSON);
+		marsh.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		StringWriter writer = new StringWriter();
+		marsh.marshal(this, writer);
+		return writer.toString();
+	}
+
+}

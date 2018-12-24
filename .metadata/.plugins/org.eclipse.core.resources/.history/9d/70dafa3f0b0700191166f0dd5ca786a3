@@ -1,0 +1,36 @@
+package internet;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.xml.bind.JAXBException;
+
+import my.model.Currency;
+import nbp.client.NBPClient;
+import nbp.model.CurrencyRates;
+
+@Path("{currencyCode}")
+public class CurrencyResource {
+	
+		@GET
+		@Path("xml")
+		@Produces({ MediaType.APPLICATION_JSON })
+		public String getXML(@PathParam("currencyCode") String code) {
+			NBPClient client = new NBPClient();
+			
+			try {
+				CurrencyRates jpyNBP = client.getCurrencyInstance("C", code, 3);
+				Currency jpy = new Currency(jpyNBP.getName(), jpyNBP.getCode(), jpyNBP.getBidMean(), jpyNBP.getAskMean());
+				return jpy.toXML();
+			} catch (JAXBException e) {
+				e.printStackTrace();
+			}
+			return "Coœ siê zjeba³o";
+		}
+		
+
+		
+
+}
